@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Middle Earth in real life</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css" rel="stylesheet"/>
+    <style>
+        body {
+			margin:0; 
+			padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+		section {background-color: burlywood;}
+    </style>
+</head>
+<body>
+
+
+<style>
+#map {
+    position: fixed;
+    width:50%;
+}
+#features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+}
+section {
+    padding:  25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+}
+section.active {
+    opacity: 1;
+}
+section:last-child {
+    border-bottom: none;
+    margin-bottom: 200px;
+}
+</style>
+
+<div id="map"></div>
+<div id="features">
+    <section id="hobbiton" class="active">
+        <h3>Hobbiton</h3>
+		<img src="images/hobbiton.jpg" alt="Hobbiton">
+      <p>Hobbiton is a small town in The Shire, the home of the Hobbits in Middle Earth. In real life there is a built replica of Hobbiton in Matamata in the Waikato region of New Zealand, that you can visit yourself.  </p>
+    </section>
+    <section id="doom">
+        <h3>Mount Doom</h3>
+		<img src="images/doom.jpg" alt="Mount Doom">
+      <p>Mount Doom is the mountain where the one ring was forged and it is actually a mountain (or rather a volcano) that exists in real life. It's real name is Mount Ngauruhoe and it is located between two other volcanos, Mount Tongariro and Mount Ruapehu. </p>
+		<img src="images/ngauruhoe.jpg" alt="Mount Ngauruhoe">
+    </section>
+    <section id="rohan">
+        <h3>Rohan</h3>
+	    <img src="images/rohan.jpg" alt="Rohan">
+        <p>Mount Sunday is the real life location of Rohan in The Lord of the Rings. Edoras, the capital of Rohan, is placed atop of the mountain in the movie</p>
+		<img src="images/sunday.jpg" alt="Mount Sunday">
+    </section>
+    <section id="fangorn">
+        <h3>Fangorn Forest</h3>
+		<img src="images/fangorn.jpg" alt="Fangorn Forest">
+        <p>Fangorn Forest makes an appearance in Lord of the Rings The Two Towers. The spooky forest is really a beautiful national park located in Te Anau  called Fiordland National Park. </p>
+		<img src="images/fiordland.jpg" alt="Fiordland National Park">
+    </section>
+    <section id="potd">
+        <h3>Paths of the Dead</h3>
+		<img src="images/potd.jpg" alt="Paths of the dead">
+        <p>The Paths of the Dead is the location in Return of the King, where Aragorn and the others have to recruit an army of ghosts to win the war against Saruman. In real life this place is called the Putangirua Pinnacles and is located </p>
+		<img src="images/putangirua.jpg" alt="Putangirua Pinnacles">
+    </section>
+</div>
+<script>
+mapboxgl.accessToken = "pk.eyJ1IjoibWtyMDYwMzk2IiwiYSI6ImNqZmpkOWh2NjR2cGkyd21tNzF4d3lnbjIifQ.A-9lUxMUYaE2YuNdho3k0A";
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: "mapbox://styles/mkr060396/cjfjdu6d87udh2ro4m2pdw8ct",
+    center: [173.746,-41.317],
+    zoom: 15.5,
+    bearing: 27,
+    pitch: 45
+});
+
+var chapters = {
+    'hobbiton': {
+        bearing: 27,
+        center: [175.770,-37.810],
+        zoom: 15.5,
+        pitch: 20
+    },
+    'doom': {
+        duration: 6000,
+        center: [175.639,-39.158],
+        bearing: 150,
+        zoom: 15,
+        pitch: 0
+    },
+    'rohan': {
+        bearing: 90,
+        center: [170.890,-43.547],
+        zoom: 13,
+        speed: 0.6,
+        pitch: 40
+    },
+    'fangorn': {
+        bearing: 90,
+        center: [167.499,-45.304],
+        zoom: 12.3
+    },
+    'potd': {
+        bearing: 45,
+        center: [175.234,-41.456],
+        zoom: 15.3,
+        pitch: 20,
+        speed: 0.5
+  
+    }
+};
+
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+    var chapterNames = Object.keys(chapters);
+    for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+};
+
+var activeChapterName = 'baker';
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+
+    map.flyTo(chapters[chapterName]);
+
+    document.getElementById(chapterName).setAttribute('class', 'active');
+    document.getElementById(activeChapterName).setAttribute('class', '');
+
+    activeChapterName = chapterName;
+}
+
+function isElementOnScreen(id) {
+    var element = document.getElementById(id);
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+
+</script>
+
+</body>
+</html>
